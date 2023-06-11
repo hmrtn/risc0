@@ -19,7 +19,7 @@ use ethers::{
     middleware::SignerMiddleware,
     providers::{Http, Middleware, Provider, StreamExt},
     signers::{LocalWallet, Signer},
-    types::{Address, U256},
+    types::{Address, Bytes},
 };
 use hello_bonsai_contracts::HelloBonsai;
 
@@ -27,7 +27,7 @@ use hello_bonsai_contracts::HelloBonsai;
 #[clap(author, version, about, long_about = None)]
 struct Args {
     /// Value of n to use as the input to the Fibonacci calculation.
-    n: u32,
+    input: Vec<u8>,
 
     /// JSON RPC URL for an Ethereum node that will serve call and transaction
     /// requests. Currently only HTTP(S) URLs are supported.
@@ -49,6 +49,8 @@ struct Args {
 async fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
+    // args.input = args.input.trim_start_matches("0x").to_string();
+
     // Create a wallet and connection to the Ethereum node.
     let wallet = LocalWallet::from_str(args.ethereum_private_key.trim_start_matches("0x"))?;
     let provider = Provider::<Http>::try_from(&args.ethereum_node_url)?;
@@ -69,9 +71,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut subscription = events.stream().await?;
 
     // Call a function which offloads work to Bonsai.
-    println!("Sending transaction for HelloBonsai.calculate_fibonacci...");
+    println!("Sending transaction for HelloBonsai.compress_bytes...");
     let receipt = hello_bonsai
-        .calculate_fibonacci(U256::from(args.n))
+        .compress_bytes(Bytes::from(args.input))
         .send()
         .await?
         .confirmations(1)
@@ -90,9 +92,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("    Log: {:?}", callback_log);
 
     // Check that the expected changes took place on the contract.
-    println!("Calling HelloBonsai.fibonacci({})", args.n);
-    let result: U256 = hello_bonsai.fibonacci(U256::from(args.n)).call().await?;
-    println!(" Result: {}", result);
-
+    // println!("Calling HelloBonsai.fibonacci({})", args.n);
+    // let result: U256 = hello_bonsai.fibonacci(U256::from(args.n)).call().await?;
+    // println!(" Result: {}", result);
+    //
     Ok(())
 }

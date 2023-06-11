@@ -1713,6 +1713,7 @@ name = "hello-bonsai-contracts"
 version = "0.1.0"
 dependencies = [
  "ethers",
+ "ethers-core",
  "ethers-solc",
  "hello-bonsai-methods",
  "risc0-zkvm",

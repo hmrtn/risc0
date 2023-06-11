@@ -19,7 +19,7 @@ pub mod utils;
 
 use std::{collections::HashMap, error::Error};
 
-use ethers::prelude::*;
+use ethers::{core::types::Bytes, prelude::*};
 use hello_bonsai_contracts::HelloBonsai;
 use hello_bonsai_methods::{COMPRESS_ELF, COMPRESS_ID};
 use risc0_zkvm::sha::Digest;
@@ -40,22 +40,22 @@ pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
 
         // Subscribe to events on HelloBonsai.
         let events = hello_bonsai.events();
+        println!("events: {:?}", events);
         let mut subscription = events.subscribe().await?;
 
+        let input: Bytes = b"Hello, Bonsai!".into();
+        println!("input: {:?}", input);
+
         // Call a function which offloads work to Bonsai.
-        hello_bonsai
-            .calculate_fibonacci(U256::from(10))
-            .send()
-            .await?;
-        //
-        // // Wait for the callback to come from Bonsai.
-        // let callback_log = subscription.next().await.unwrap()?;
-        // assert_eq!(callback_log.n, U256::from(10));
-        // assert_eq!(callback_log.result, U256::from(89));
-        //
-        // // Check that the expected changes took place on the contract.
-        // let result: U256 = hello_bonsai.fibonacci(U256::from(10)).call().await?;
-        // assert_eq!(result, U256::from(89));
+        hello_bonsai.compress_bytes(input).send().await?;
+
+        // Wait for the callback to come from Bonsai.
+        let callback_log = subscription.next().await.unwrap()?;
+
+        // TODO: finish tests
+        println!("callback_log.result: {:?}", callback_log);
+        // assert_eq!(1, 2);
+
         Ok(())
     })
     .await

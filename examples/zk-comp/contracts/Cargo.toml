@@ -8,6 +8,7 @@ ethers = { version = "1.0", features = ["ws", "rustls"] }
 
 [build-dependencies]
 ethers-solc = { version = "1.0", features = ["full"] }
+ethers-core = { version = "1.0" }
 
 [dev-dependencies]
 hello-bonsai-methods = { workspace = true }

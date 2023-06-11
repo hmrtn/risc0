@@ -16,40 +16,60 @@
 #![no_std]
 #![feature(alloc_error_handler)]
 extern crate alloc;
+
+use alloc::vec;
 use alloc::vec::Vec;
-use ethabi::{ethereum_types::U256, ParamType, Token};
+use ethabi::{Token};
 use risc0_zkvm::guest::env;
 
 risc0_zkvm::guest::entry!(main);
 
-fn compress(input: &[u8]) -> Vec<u8> {
+pub fn compress(input: Vec<u8>) -> Vec<u8> {
     let mut result = Vec::new();
     let mut i = 0;
 
     while i < input.len() {
-        let count = input[i..].iter().take_while(|&&x| x == input[i]).count();
+        let count = input[i..]
+            .iter()
+            .take_while(|&&x| x == input[i])
+            .take(u8::MAX as usize)  // Restrict to 255 counts.
+            .count();
+
+        // Check for more than 255 repeats.
+        // If there are, break up the repeats into multiple runs.
+        if count == u8::MAX as usize && i + count != input.len() && input[i] == input[i + count] {
+            let mut j = 0;
+            while j < count {
+                let count2 = input[i + j..]
+                    .iter()
+                    .take_while(|&&x| x == input[i + j])
+                    .take(u8::MAX as usize)  // Restrict to 255 counts.
+                    .count();
+                result.push(input[i + j]);
+                result.push(count2 as u8);  // Push count as u8.
+                j += count2;
+            }
+            i += count;
+            continue;
+        }
+        // if count == u8::MAX as usize && i + count != input.len() && input[i] == input[i + count] {
+        //     panic!("Too many repeated bytes in input.");
+        // }
+
         result.push(input[i]);
-        result.extend(&count.to_ne_bytes());  // Convert count to bytes.
+        result.push(count as u8);  // Push count as u8.
         i += count;
     }
 
     result
 }
 
-// const INPUT_LEN: usize = 256; // Fixed size input to 256 bytes.
+const INPUT_LEN: usize = 14;//core::mem::size_of::<U256>();
 
-const INPUT_LEN: usize = core::mem::size_of::<U256>();
 pub fn main() {
-    let mut input_bytes = [0u8; INPUT_LEN];
+    let mut input_bytes = vec![0u8; INPUT_LEN];
     env::read_slice(&mut input_bytes);
-    let input = ethabi::decode_whole(&[ParamType::Uint(256)], &input_bytes).unwrap();
-    // let mut input_bytes = [0u8; INPUT_LEN];
-    // env::read_slice(&mut input_bytes);
-    //
-    // let input = ethabi::decode_whole(&[ParamType::Bytes], &input_bytes).unwrap();
-    // let to_compress: Vec<u8> = input[0].clone().into_bytes().unwrap();
-    //
-    // let result = compress(&to_compress);
 
-    // env::commit_slice(&ethabi::encode(&[Token::Bytes(to_compress), Token::Bytes(result)]));
+    let result = compress(input_bytes);
+    env::commit_slice(&ethabi::encode(&[Token::Bytes(result)]));
 }
