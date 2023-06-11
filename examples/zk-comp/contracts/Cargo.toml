@@ -1,5 +1,5 @@
 [package]
-name = "hello-bonsai-contracts"
+name = "compress-contracts"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,7 +11,7 @@ ethers-solc = { version = "1.0", features = ["full"] }
 ethers-core = { version = "1.0" }
 
 [dev-dependencies]
-hello-bonsai-methods = { workspace = true }
+compress-methods = { workspace = true }
 risc0-zkvm = { workspace = true }
 tokio = "1.24"
 

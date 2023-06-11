@@ -21,8 +21,8 @@ use ethers::{
     signers::{LocalWallet, Signer},
     types::{Address, H256},
 };
-use hello_bonsai_contracts::HelloBonsai;
-use hello_bonsai_methods::{COMPRESS_ELF, COMPRESS_ID};
+use compress_contracts::Compress;
+use compress_methods::{COMPRESS_ELF, COMPRESS_ID};
 use reqwest::{Client, Url};
 use risc0_zkvm::sha::{self, Digest, Sha256};
 
@@ -100,9 +100,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("    SHA-256:  {}", elf_hash);
     println!("    Image ID: {}", hex::encode(Digest::from(COMPRESS_ID)));
 
-    // Deploy the HelloBonsai contract.
+    // Deploy the Compress contract.
     println!("Deploying guest binary to Bonsai...");
-    let hello_bonsai = HelloBonsai::deploy(
+    let compress = Compress::deploy(
         client.clone(),
         (
             args.bonsai_proxy_contract_address,
@@ -111,8 +111,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     )?
     .send()
     .await?;
-    println!("Deployed HelloBonsai contract at");
-    println!("    HelloBonsai address: {:?}", hello_bonsai.address());
+    println!("Deployed Compress contract at");
+    println!("    Compress address: {:?}", compress.address());
 
     Ok(())
 }

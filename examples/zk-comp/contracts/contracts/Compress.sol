@@ -21,7 +21,7 @@ import {BonsaiApp} from "./BonsaiApp.sol";
 
 /// @title A simple example of a Bonsai application contract.
 /// @dev This contract demonstrates basic RLE compression using Bonsai to offload the computation.
-contract HelloBonsai is BonsaiApp {
+contract Compress is BonsaiApp {
   // Cache of the results calculated by our guest program in Bonsai.
   mapping(uint256 => uint256) public fibonnaci_cache;
   mapping(bytes32 => bytes) public compress_cache;

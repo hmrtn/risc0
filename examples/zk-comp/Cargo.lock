@@ -594,6 +594,43 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
 
 [[package]]
+name = "compress-cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "compress-contracts",
+ "compress-methods",
+ "ethers",
+ "hex",
+ "reqwest",
+ "risc0-zkp",
+ "risc0-zkvm",
+ "tokio",
+]
+
+[[package]]
+name = "compress-contracts"
+version = "0.1.0"
+dependencies = [
+ "compress-methods",
+ "ethers",
+ "ethers-core",
+ "ethers-solc",
+ "risc0-zkvm",
+ "tokio",
+]
+
+[[package]]
+name = "compress-methods"
+version = "0.1.0"
+dependencies = [
+ "ethabi",
+ "risc0-build",
+ "risc0-zkp",
+ "risc0-zkvm",
+]
+
+[[package]]
 name = "const-oid"
 version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1692,43 +1729,6 @@ name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
-
-[[package]]
-name = "hello-bonsai-cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "ethers",
- "hello-bonsai-contracts",
- "hello-bonsai-methods",
- "hex",
- "reqwest",
- "risc0-zkp",
- "risc0-zkvm",
- "tokio",
-]
-
-[[package]]
-name = "hello-bonsai-contracts"
-version = "0.1.0"
-dependencies = [
- "ethers",
- "ethers-core",
- "ethers-solc",
- "hello-bonsai-methods",
- "risc0-zkvm",
- "tokio",
-]
-
-[[package]]
-name = "hello-bonsai-methods"
-version = "0.1.0"
-dependencies = [
- "ethabi",
- "risc0-build",
- "risc0-zkp",
- "risc0-zkvm",
-]
 
 [[package]]
 name = "hermit-abi"

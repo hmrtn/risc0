@@ -1,5 +1,5 @@
 [package]
-name = "hello-bonsai-methods-guest"
+name = "compress-methods-guest"
 version = "0.1.0"
 edition = "2021"
 

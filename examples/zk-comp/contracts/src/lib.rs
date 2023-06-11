@@ -22,4 +22,4 @@
 
 use ethers::prelude::abigen;
 
-abigen!(HelloBonsai, "artifacts/HelloBonsai.sol/HelloBonsai.json");
+abigen!(Compress, "artifacts/Compress.sol/Compress.json");

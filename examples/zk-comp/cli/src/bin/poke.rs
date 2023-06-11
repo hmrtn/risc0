@@ -21,7 +21,7 @@ use ethers::{
     signers::{LocalWallet, Signer},
     types::{Address, Bytes},
 };
-use hello_bonsai_contracts::HelloBonsai;
+use compress_contracts::Compress;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -34,7 +34,7 @@ struct Args {
     #[clap(short = 'e', long, env, value_hint = clap::ValueHint::Url)]
     ethereum_node_url: String,
 
-    /// HelloBonsai contract address.
+    /// Compress contract address.
     #[clap(short = 'a', long, env)]
     hello_bonsai_contract_address: Address,
 
@@ -63,15 +63,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
         wallet.with_chain_id(chain_id.as_u64()),
     ));
 
-    // Deploy the HelloBonsai contract.
-    let hello_bonsai = HelloBonsai::new(args.hello_bonsai_contract_address, client.clone());
+    // Deploy the Compress contract.
+    let hello_bonsai = Compress::new(args.hello_bonsai_contract_address, client.clone());
 
-    // Subscribe to events on HelloBonsai.
+    // Subscribe to events on Compress.
     let events = hello_bonsai.events();
     let mut subscription = events.stream().await?;
 
     // Call a function which offloads work to Bonsai.
-    println!("Sending transaction for HelloBonsai.compress_bytes...");
+    println!("Sending transaction for Compress.compress_bytes...");
     let receipt = hello_bonsai
         .compress_bytes(Bytes::from(args.input))
         .send()

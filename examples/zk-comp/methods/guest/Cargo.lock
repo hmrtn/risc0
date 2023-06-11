@@ -65,6 +65,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "compress-methods-guest"
+version = "0.1.0"
+dependencies = [
+ "ethabi",
+ "miniz_oxide",
+ "risc0-zkvm",
+]
+
+[[package]]
 name = "cpufeatures"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -152,15 +161,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "wasi",
-]
-
-[[package]]
-name = "hello-bonsai-methods-guest"
-version = "0.1.0"
-dependencies = [
- "ethabi",
- "miniz_oxide",
- "risc0-zkvm",
 ]
 
 [[package]]
