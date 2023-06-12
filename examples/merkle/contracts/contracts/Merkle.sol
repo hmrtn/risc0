@@ -24,7 +24,8 @@ import {BonsaiApp} from "./BonsaiApp.sol";
 //       or difficult to implement function to a RISC Zero guest running on Bonsai.
 contract Merkle is BonsaiApp {
   // Cache of the results calculated by our guest program in Bonsai.
-  mapping(uint256 => uint256) public fibonnaci_cache;
+  mapping(uint256 => bytes32) public merkle_cache;
+  uint256 public merkle_cache_size;
 
   // Initialize the contract, binding it to a specified Bonsai proxy and RISC Zero guest image.
   constructor(
@@ -34,21 +35,7 @@ contract Merkle is BonsaiApp {
 
   event MerkleCallback(bytes32 root);
 
-  /// @notice Returns nth number in the Fibonacci sequence.
-  /// @dev The sequence is defined as 1, 1, 2, 3, 5 ... with fibonnacci(0) == 1.
-  ///      Only precomputed results can be returned. Call calculate_fibonacci(n) to precompute.
-//  function fibonacci(uint256 n) external view returns (uint256) {
-//    uint256 result = fibonnaci_cache[n];
-//    require(result != 0, "value not available in cache");
-//    return result;
-//  }
-
-  /// @notice Sends a request to Bonsai to have have the nth Fibonacci number calculated.
-  /// @dev This function sends the request to Bonsai through the on-chain proxy.
-  ///      The request will trigger Bonsai to run the specified RISC Zero guest program with
-  ///      the given input and asynchronously return the verified results via the callback below.
   function merkle_root(
-  // uin256[] of length 32
     bytes32[32] memory n
   ) external {
     submit_bonsai_request(abi.encode(n));
@@ -60,6 +47,7 @@ contract Merkle is BonsaiApp {
     // Decode the journal into the result.
     (bytes32 root) = abi.decode(journal, (bytes32));
     emit MerkleCallback(root);
-//    fibonnaci_cache[n] = result;
+    merkle_cache[merkle_cache_size] = root;
+    merkle_cache_size += 1;
   }
 }

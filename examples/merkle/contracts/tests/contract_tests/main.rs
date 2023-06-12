@@ -51,8 +51,10 @@ pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
         let mut subscription = events.subscribe().await?;
 
         let mut input = [[0u8; 32]; 32];
+        println!("input: {:?}", input);
 
         let expected_input = vec![H256::zero(); 32];
+        println!("expected input: {:?}", expected_input);
         let expected_merklized = test_merklize(&expected_input);
         println!("test_merklized: {:?}", expected_merklized);
         merkle.merkle_root(input).send().await?;
@@ -69,6 +71,7 @@ pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
         println!("journal: {:?}", root);
 
         assert_eq!(expected_merklized, root[0]);
+        assert_eq!(1, 2);
         Ok(())
     })
     .await
