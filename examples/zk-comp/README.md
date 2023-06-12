@@ -1,26 +1,6 @@
-# Bonsai Starter Template
-
-Starter template for writing an application using [Bonsai].
-
-This repository implements an application on Ethereum utilizing Bonsai as a coprocessor to the smart contract application.
-It provides a starting point for building powerful new applications on Ethereum that offload computationally intensive, or difficult to implement tasks to a [RISC Zero] guest, with verified results sent to your Ethereum contract.
+# Bonsai Compression
 
 ## Getting Started
-
-Start building your application by forking this template.
-
-### Dependencies
-
-* Rust and Cargo: https://rustup.rs
-* Ganache: https://www.npmjs.com/package/ganache#command-line-use
-
-### Write Your App
-
-Get started writing your application by modifying these key files:
-* Replace `contracts/contracts/HelloBonsai.sol` with your on-chain application logic.
-* Replace `methods/guest/src/bin/fibonacci.rs` with your Bonsai coprocessor logic.
-
-Associated build configuration files and tests are discussed along with the [project structure](#project-structure) below.
 
 ### Build
 
@@ -36,45 +16,6 @@ Running the following will run all tests, including Ethereum contracts and RISC 
 
 ```bash
 cargo test
-```
-
-## Project Structure
-
-```text
-.
-├── Cargo.toml
-├── README.md
-├── cli
-│   ├── Cargo.toml
-│   └── src
-│       └── bin
-│           ├── deploy.rs
-│           └── poke.rs
-├── contracts
-│   ├── Cargo.toml
-│   ├── build.rs
-│   ├── contracts
-│   │   ├── HelloBonsai.sol
-│   │   ├── IBonsaiProxy.sol
-│   │   ├── IBonsaiApp.sol
-│   │   └── test
-│   │       └── MockBonsaiProxy.sol
-│   ├── src
-│   │   └── lib.rs
-│   └── tests
-│       └── contract_tests/
-│           ├── main.rs
-│           └── utils.rs
-└── methods
-    ├── Cargo.toml
-    ├── build.rs
-    ├── guest
-    │   ├── Cargo.toml
-    │   └── src
-    │       └── bin
-    │           └── fibonacci.rs
-    └── src
-        └── lib.rs
 ```
 
 ### Contracts
@@ -108,7 +49,7 @@ Additionally the CLI includes example commands to interact with the smart contra
 
 CLI commands are defined in their respective files in `cli/src/bin`.
 
-**To get access to Bonsai, sign up for the [waitlist].** 
+**To get access to Bonsai, sign up for the [waitlist].**
 
 #### Deploy
 
@@ -120,15 +61,15 @@ Usage: deploy --ethereum-node-url <ETHEREUM_NODE_URL> --bonsai-url <BONSAI_URL> 
 
 Options:
   -e, --ethereum-node-url <ETHEREUM_NODE_URL>
-          JSON RPC URL for an Ethereum node that will serve call and transaction requests. Currently only HTTP(S) URLs are supported. 
+          JSON RPC URL for an Ethereum node that will serve call and transaction requests. Currently only HTTP(S) URLs are supported.
   -b, --bonsai-url <BONSAI_URL>
-          URL for the Bonsai service for to upload the ELF binary 
+          URL for the Bonsai service for to upload the ELF binary
   -p, --bonsai-proxy-contract-address <BONSAI_PROXY_CONTRACT_ADDRESS>
-          Ethereum contract address for the Bonsai proxy 
+          Ethereum contract address for the Bonsai proxy
       --bonsai-api-key <BONSAI_API_KEY>
-          API Key for Bonsai to authorize requests 
+          API Key for Bonsai to authorize requests
       --ethereum-private-key <ETHEREUM_PRIVATE_KEY>
-          Ethereum private key to use for sending transactions 
+          Ethereum private key to use for sending transactions
 ```
 
 #### Poke
