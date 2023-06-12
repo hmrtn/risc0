@@ -25,7 +25,7 @@ mod tests {
     use risc0_zkvm::{Executor, ExecutorEnv};
     use rs_merkle::{algorithms::Sha256, Hasher, MerkleTree};
 
-    use super::FIBONACCI_ELF;
+    use super::MERKLE_ELF;
 
     #[test]
     fn fibonacci() {
@@ -46,7 +46,7 @@ mod tests {
         let env = ExecutorEnv::builder()
             .add_input(&encoded_test_input)
             .build();
-        let mut exec = Executor::from_elf(env.unwrap(), FIBONACCI_ELF).unwrap();
+        let mut exec = Executor::from_elf(env.unwrap(), MERKLE_ELF).unwrap();
         let session = exec.run().unwrap();
         println!("session: {:?}", session.journal);
 

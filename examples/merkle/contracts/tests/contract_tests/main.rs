@@ -21,7 +21,7 @@ use std::{collections::HashMap, error::Error};
 
 use ethers::prelude::*;
 use merkle_contracts::Merkle;
-use merkle_methods::{FIBONACCI_ELF, FIBONACCI_ID};
+use merkle_methods::{MERKLE_ELF, MERKLE_ID};
 use risc0_zkvm::sha::Digest;
 use rs_merkle::{algorithms::Sha256, Hasher, MerkleTree};
 
@@ -29,8 +29,8 @@ use crate::utils::bonsai_test;
 
 #[tokio::test]
 pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
-    let image_id = Digest::from(FIBONACCI_ID);
-    let registry = HashMap::from([(image_id, FIBONACCI_ELF)]);
+    let image_id = Digest::from(MERKLE_ID);
+    let registry = HashMap::from([(image_id, MERKLE_ELF)]);
 
     fn test_merklize(input: &[H256]) -> H256 {
         let leaf_values = input

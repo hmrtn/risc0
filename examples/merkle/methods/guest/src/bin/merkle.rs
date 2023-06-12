@@ -29,19 +29,17 @@ use rs_merkle::{
 
 risc0_zkvm::guest::entry!(main);
 
-// Function to calculate the Merkle root from a given array of H256 values
+// fn to calculate the merkle root from a given array of H256 values
 fn merkle_root(input: &[H256]) -> H256 {
-    // Hashing each H256 value with Sha256
+    // hash each H256 value with Sha256
     let leaf_values = input.iter().map(|x| Sha256::hash(x.as_bytes())).collect::<Vec<[u8; 32]>>();
-    // Constructing a Merkle tree from the hashed values
+    // construct a merkle tree from the hashed values
     let merkle_tree = MerkleTree::<Sha256>::from_leaves(&leaf_values);
-    // Extracting the Merkle root from the tree
+    // extract merkle root from the tree
     let merkle_root = merkle_tree.root().ok_or("could not obtain merkle root");
-    // Return the Merkle root as a H256 value
     H256::from(merkle_root.unwrap())
 }
 
-// Defining constants for the size of H256, the array length, and the total input length
 const H256_LEN: usize = core::mem::size_of::<H256>();
 const ARRAY_LEN: usize = 32;
 const INPUT_LEN: usize = H256_LEN * ARRAY_LEN;
@@ -51,7 +49,7 @@ pub fn main() {
     // read slice of bytes from the environment
     env::read_slice(&mut input_bytes);
 
-    // Initializing an array to hold the H256 values
+    // init an array to hold the H256 values
     let mut input = [H256::zero(); ARRAY_LEN];
 
     // decode the byte slice into an array of H256 values

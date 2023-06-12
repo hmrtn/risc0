@@ -27,7 +27,7 @@ use merkle_contracts::Merkle;
 #[clap(author, version, about, long_about = None)]
 struct Args {
     /// Value of n to use as the input to the Fibonacci calculation.
-    n: u32,
+    // n: u32,
 
     /// JSON RPC URL for an Ethereum node that will serve call and transaction
     /// requests. Currently only HTTP(S) URLs are supported.
@@ -36,7 +36,7 @@ struct Args {
 
     /// Merkle contract address.
     #[clap(short = 'a', long, env)]
-    hello_bonsai_contract_address: Address,
+    merkle_contract_address: Address,
 
     /// Ethereum private key to use for sending transactions.
     // NOTE: Provided as an example and for testing. Integrate your preferred key management.
@@ -62,12 +62,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     ));
 
     // Deploy the Merkle contract.
-    let hello_bonsai = Merkle::new(args.hello_bonsai_contract_address, client.clone());
+    let hello_bonsai = Merkle::new(args.merkle_contract_address, client.clone());
 
     // Subscribe to events on HelloBonsai.
     let events = hello_bonsai.events();
     let mut subscription = events.stream().await?;
 
+    // TODO: Fix Poke arg parser to work with [[u8; 32]; 32].
     // Call a function which offloads work to Bonsai.
     // println!("Sending transaction for HelloBonsai.calculate_fibonacci...");
     // let receipt = hello_bonsai

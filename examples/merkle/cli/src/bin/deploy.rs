@@ -22,7 +22,7 @@ use ethers::{
     types::{Address, H256},
 };
 use merkle_contracts::Merkle;
-use merkle_methods::{FIBONACCI_ELF, FIBONACCI_ID};
+use merkle_methods::{MERKLE_ELF, MERKLE_ID};
 use reqwest::{Client, Url};
 use risc0_zkvm::sha::{self, Digest, Sha256};
 
@@ -93,12 +93,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let elf_hash = upload_elf(
         &Url::parse(&args.bonsai_url)?,
         &args.bonsai_api_key,
-        FIBONACCI_ELF,
+        MERKLE_ELF,
     )
     .await?;
     println!("Uploaded guest binary");
     println!("    SHA-256:  {}", elf_hash);
-    println!("    Image ID: {}", hex::encode(Digest::from(FIBONACCI_ID)));
+    println!("    Image ID: {}", hex::encode(Digest::from(MERKLE_ID)));
 
     // Deploy the HelloBonsai contract.
     println!("Deploying guest binary to Bonsai...");
