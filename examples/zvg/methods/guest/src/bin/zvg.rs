@@ -49,16 +49,18 @@ impl ColorGenerator {
 struct SvgGenerator {
     color_generator: ColorGenerator,
     num_colors: usize,
+    id: u64,
 }
 
 impl SvgGenerator {
-    fn new(seed: u64, num_colors: usize) -> Self {
+    fn new(id: u64, seed: u64, num_colors: usize) -> Self {
         SvgGenerator {
             color_generator: ColorGenerator::new(seed),
             num_colors,
+            id: id,
         }
     }
-    fn generate_svg(&mut self, id: u64) -> String {
+    fn generate_svg(&mut self) -> String {
         let colors = self.color_generator.random_colors(self.num_colors);
         let stops = colors.iter().enumerate().map(|(i, color)| {
             let offset = (i as f32 / self.num_colors as f32) * 100.0;
@@ -68,7 +70,7 @@ impl SvgGenerator {
             r##"<svg viewBox="0 0 148 148"><defs><radialGradient id="a" gradientTransform="matrix(2 0 0 2 -.9 0)"><stop offset="0%" stop-color="{}"/></radialGradient><linearGradient id="b" x1=".35" y1=".02" x2=".65" y2=".98">{}</linearGradient></defs><rect fill="url(#a)" height="100%" width="100%"/><rect fill="url(#b)" height="100%" width="100%"/><text x="74" y="24" font-family="-apple-system, system-ui, BlinkMacSystemFont, Roboto" dominant-baseline="middle" text-anchor="middle" font-size="18" fill="#74838f" font-weight="700">{}</text></svg>"##,
             colors[0],
             stops,
-            id,
+            self.id,
         ).to_string()
     }
 }
@@ -82,8 +84,9 @@ pub fn main() {
     let id: U256 = input[0].clone().into_uint().unwrap();
     // Custom amount of colors
     let num_colors = 11;
-    let mut svg_generator = SvgGenerator::new(id.as_u64(), num_colors);
-    let result = svg_generator.generate_svg(id.as_u64());
+    // Use id as seed
+    let mut svg_generator = SvgGenerator::new(id.as_u64(), id.as_u64(), num_colors);
+    let result = svg_generator.generate_svg();
 
     env::commit_slice(&ethabi::encode(&[Token::Uint(id), Token::String(result)]));
 }
