@@ -69,9 +69,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut subscription = events.stream().await?;
 
     // Call a function which offloads work to Bonsai.
-    println!("Sending transaction for HelloBonsai.calculate_fibonacci...");
+    println!("Sending transaction for HelloBonsai.mint...");
     let receipt = hello_bonsai
-        .calculate_fibonacci(U256::from(args.n))
+        .mint(U256::from(args.n))
         .send()
         .await?
         .confirmations(1)
@@ -90,9 +90,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
     println!("    Log: {:?}", callback_log);
 
     // Check that the expected changes took place on the contract.
-    println!("Calling HelloBonsai.fibonacci({})", args.n);
-    let result: U256 = hello_bonsai.fibonacci(U256::from(args.n)).call().await?;
-    println!(" Result: {}", result);
+    // println!("Calling HelloBonsai.fibonacci({})", args.n);
+    // let result: U256 = hello_bonsai.fibonacci(U256::from(args.n)).call().await?;
+    // println!(" Result: {}", result);
 
     Ok(())
 }

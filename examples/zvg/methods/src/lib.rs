@@ -28,7 +28,7 @@ mod tests {
         let env = ExecutorEnv::builder()
             .add_input(&ethabi::encode(&[Token::Uint(U256::from(10))]))
             .build();
-        let mut exec = Executor::from_elf(env, FIBONACCI_ELF).unwrap();
+        let mut exec = Executor::from_elf(env.unwrap(), FIBONACCI_ELF).unwrap();
         let session = exec.run().unwrap();
         assert_eq!(
             &session.journal,

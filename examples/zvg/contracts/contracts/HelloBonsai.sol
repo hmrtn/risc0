@@ -18,44 +18,57 @@ pragma solidity ^0.8.16;
 
 import {IBonsaiProxy} from "./IBonsaiProxy.sol";
 import {BonsaiApp} from "./BonsaiApp.sol";
+import {ERC721} from "./ERC721.sol";
 
-/// @title A starter application using Bonsai through the on-chain proxy.
-/// @dev This contract demonstrates one pattern for offloading the computation of an expensive
-//       or difficult to implement function to a RISC Zero guest running on Bonsai.
-contract HelloBonsai is BonsaiApp {
-  // Cache of the results calculated by our guest program in Bonsai.
-  mapping(uint256 => uint256) public fibonnaci_cache;
+contract HelloBonsai is BonsaiApp, ERC721 {
 
-  // Initialize the contract, binding it to a specified Bonsai proxy and RISC Zero guest image.
+  mapping(uint256 => string) public token_svg_cache;
+
+  event CalculateFibonacciCallback(uint256 indexed id, uint256 result);
+
   constructor(
     IBonsaiProxy _bonsai_proxy,
     bytes32 _image_id
   ) BonsaiApp(_bonsai_proxy, _image_id) {}
 
-  event CalculateFibonacciCallback(uint256 indexed n, uint256 result);
-
-  /// @notice Returns nth number in the Fibonacci sequence.
-  /// @dev The sequence is defined as 1, 1, 2, 3, 5 ... with fibonnacci(0) == 1.
-  ///      Only precomputed results can be returned. Call calculate_fibonacci(n) to precompute.
-  function fibonacci(uint256 n) external view returns (uint256) {
-    uint256 result = fibonnaci_cache[n];
-    require(result != 0, "value not available in cache");
-    return result;
+  function name() public view virtual override returns (string memory) {
+    return "BONSAI-NFT";
   }
 
-  /// @notice Sends a request to Bonsai to have have the nth Fibonacci number calculated.
-  /// @dev This function sends the request to Bonsai through the on-chain proxy.
-  ///      The request will trigger Bonsai to run the specified RISC Zero guest program with
-  ///      the given input and asynchronously return the verified results via the callback below.
-  function calculate_fibonacci(uint256 n) external {
-    submit_bonsai_request(abi.encode(n));
+  function symbol() public view virtual override returns (string memory) {
+    return "BNFT";
   }
+//
+//  function calculate_fibonacci(uint256 n) external {
+//    submit_bonsai_request(abi.encode(n));
+//  }
 
   /// @notice Callback function logic for processing verified journals from Bonsai.
   function bonsai_callback(bytes memory journal) internal override {
-    (uint256 n, uint256 result) = abi.decode(journal, (uint256, uint256));
+    (uint256 id, uint256 result) = abi.decode(journal, (uint256, uint256));
 
-    emit CalculateFibonacciCallback(n, result);
-    fibonnaci_cache[n] = result;
+    emit CalculateFibonacciCallback(id, result);
+    token_svg_cache[id] = string(abi.encodePacked(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">',
+      '<text x="10" y="20" style="fill:blue;">',
+      'Hello, World!',
+      '</text>',
+      '</svg>'
+    ));
   }
+
+  function tokenURI(uint256 id) public view virtual override returns (string memory) {
+    if (!_exists(id)) revert TokenDoesNotExist();
+    return string(abi.encodePacked("Hello, World!"));
+  }
+
+  function mint(uint256 id) public virtual {
+    _mint(msg.sender, id);
+    submit_bonsai_request(abi.encode(id));
+  }
+
+  function burn(uint256 id) public virtual {
+    _burn(msg.sender, id);
+  }
+
 }

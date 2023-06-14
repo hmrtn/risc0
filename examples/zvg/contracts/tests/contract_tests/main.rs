@@ -44,18 +44,29 @@ pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
 
         // Call a function which offloads work to Bonsai.
         hello_bonsai
-            .calculate_fibonacci(U256::from(10))
+            .mint(U256::from(10))
             .send()
             .await?;
 
         // Wait for the callback to come from Bonsai.
-        let callback_log = subscription.next().await.unwrap()?;
-        assert_eq!(callback_log.n, U256::from(10));
-        assert_eq!(callback_log.result, U256::from(89));
-
-        // Check that the expected changes took place on the contract.
-        let result: U256 = hello_bonsai.fibonacci(U256::from(10)).call().await?;
-        assert_eq!(result, U256::from(89));
+        let mut callback_log = subscription.next().await.unwrap()?;
+        println!("callback_log: {:?}", callback_log);
+        // assert_eq!(
+        //     callback_log.id,
+        //     U256::from(10)
+        // );
+        // next event in the stream
+        callback_log = subscription.next().await.unwrap()?;
+        // assert_eq!(callback_log.n, U256::from(10));
+        println!("callback_log: {:?}", callback_log);
+        // assert_eq!(callback_log.id, U256::from(10));
+        assert_eq!(1, 2);
+        // assert_eq!(callback_log.n, U256::from(10));
+        // assert_eq!(callback_log.result, U256::from(89));
+        //
+        // // Check that the expected changes took place on the contract.
+        // let result: U256 = hello_bonsai.fibonacci(U256::from(10)).call().await?;
+        // assert_eq!(result, U256::from(89));
         Ok(())
     })
     .await
