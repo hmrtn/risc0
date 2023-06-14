@@ -6,8 +6,8 @@ members = [
 ]
 
 [workspace.dependencies]
-hello-bonsai-methods = { path = "methods" }
-hello-bonsai-contracts = { path = "contracts" }
+zvg-methods = { path = "methods" }
+zvg-contracts = { path = "contracts" }
 risc0-zkp = { path = "../../risc0/zkp" }
 risc0-zkvm = { path = "../../risc0/zkvm" }
 risc0-build = { path = "../../risc0/build" }

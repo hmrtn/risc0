@@ -21,10 +21,10 @@ use ethers::{
     signers::{LocalWallet, Signer},
     types::{Address, H256},
 };
-use hello_bonsai_contracts::HelloBonsai;
-use hello_bonsai_methods::{FIBONACCI_ELF, FIBONACCI_ID};
 use reqwest::{Client, Url};
 use risc0_zkvm::sha::{self, Digest, Sha256};
+use zvg_contracts::ZVG;
+use zvg_methods::{ZVG_ELF, ZVG_ID};
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -93,26 +93,26 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let elf_hash = upload_elf(
         &Url::parse(&args.bonsai_url)?,
         &args.bonsai_api_key,
-        FIBONACCI_ELF,
+        ZVG_ELF,
     )
     .await?;
     println!("Uploaded guest binary");
     println!("    SHA-256:  {}", elf_hash);
-    println!("    Image ID: {}", hex::encode(Digest::from(FIBONACCI_ID)));
+    println!("    Image ID: {}", hex::encode(Digest::from(ZVG_ID)));
 
-    // Deploy the HelloBonsai contract.
+    // Deploy the ZVG contract.
     println!("Deploying guest binary to Bonsai...");
-    let hello_bonsai = HelloBonsai::deploy(
+    let hello_bonsai = ZVG::deploy(
         client.clone(),
         (
             args.bonsai_proxy_contract_address,
-            H256(Digest::from(FIBONACCI_ID).into()),
+            H256(Digest::from(ZVG_ID).into()),
         ),
     )?
     .send()
     .await?;
-    println!("Deployed HelloBonsai contract at");
-    println!("    HelloBonsai address: {:?}", hello_bonsai.address());
+    println!("Deployed ZVG contract at");
+    println!("    ZVG address: {:?}", hello_bonsai.address());
 
     Ok(())
 }

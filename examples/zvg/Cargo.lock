@@ -1699,34 +1699,13 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "ethers",
- "hello-bonsai-contracts",
- "hello-bonsai-methods",
  "hex",
  "reqwest",
  "risc0-zkp",
  "risc0-zkvm",
  "tokio",
-]
-
-[[package]]
-name = "hello-bonsai-contracts"
-version = "0.1.0"
-dependencies = [
- "ethers",
- "ethers-solc",
- "hello-bonsai-methods",
- "risc0-zkvm",
- "tokio",
-]
-
-[[package]]
-name = "hello-bonsai-methods"
-version = "0.1.0"
-dependencies = [
- "ethabi",
- "risc0-build",
- "risc0-zkp",
- "risc0-zkvm",
+ "zvg-contracts",
+ "zvg-methods",
 ]
 
 [[package]]
@@ -4423,4 +4402,25 @@ dependencies = [
  "cc",
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "zvg-contracts"
+version = "0.1.0"
+dependencies = [
+ "ethers",
+ "ethers-solc",
+ "risc0-zkvm",
+ "tokio",
+ "zvg-methods",
+]
+
+[[package]]
+name = "zvg-methods"
+version = "0.1.0"
+dependencies = [
+ "ethabi",
+ "risc0-build",
+ "risc0-zkp",
+ "risc0-zkvm",
 ]

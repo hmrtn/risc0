@@ -21,7 +21,7 @@ use ethers::{
     signers::{LocalWallet, Signer},
     types::{Address, U256},
 };
-use hello_bonsai_contracts::HelloBonsai;
+use zvg_contracts::ZVG;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -34,7 +34,7 @@ struct Args {
     #[clap(short = 'e', long, env, value_hint = clap::ValueHint::Url)]
     ethereum_node_url: String,
 
-    /// HelloBonsai contract address.
+    /// ZVG contract address.
     #[clap(short = 'a', long, env)]
     hello_bonsai_contract_address: Address,
 
@@ -61,15 +61,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
         wallet.with_chain_id(chain_id.as_u64()),
     ));
 
-    // Deploy the HelloBonsai contract.
-    let hello_bonsai = HelloBonsai::new(args.hello_bonsai_contract_address, client.clone());
+    // Deploy the ZVG contract.
+    let hello_bonsai = ZVG::new(args.hello_bonsai_contract_address, client.clone());
 
-    // Subscribe to events on HelloBonsai.
+    // Subscribe to events on ZVG.
     let events = hello_bonsai.events();
     let mut subscription = events.stream().await?;
 
     // Call a function which offloads work to Bonsai.
-    println!("Sending transaction for HelloBonsai.mint...");
+    println!("Sending transaction for ZVG.mint...");
     let receipt = hello_bonsai
         .mint(U256::from(args.n))
         .send()

@@ -20,7 +20,7 @@ import {IBonsaiProxy} from "./IBonsaiProxy.sol";
 import {BonsaiApp} from "./BonsaiApp.sol";
 import {ERC721} from "./ERC721.sol";
 
-contract HelloBonsai is BonsaiApp, ERC721 {
+contract ZVG is BonsaiApp, ERC721 {
 
   mapping(uint256 => string) public token_svg_cache;
 
@@ -32,11 +32,11 @@ contract HelloBonsai is BonsaiApp, ERC721 {
   ) BonsaiApp(_bonsai_proxy, _image_id) {}
 
   function name() public view virtual override returns (string memory) {
-    return "BONSAI-NFT";
+    return "zkVM SVG";
   }
 
   function symbol() public view virtual override returns (string memory) {
-    return "BNFT";
+    return "ZVG";
   }
 
   function bonsai_callback(bytes memory journal) internal override {

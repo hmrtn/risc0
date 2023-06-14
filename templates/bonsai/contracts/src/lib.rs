@@ -22,4 +22,4 @@
 
 use ethers::prelude::abigen;
 
-abigen!(HelloBonsai, "artifacts/HelloBonsai.sol/HelloBonsai.json");
+abigen!(HelloBonsai, "artifacts/ZVG.sol/HelloBonsai.json");
