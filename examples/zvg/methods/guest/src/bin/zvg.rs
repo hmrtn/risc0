@@ -57,7 +57,7 @@ impl SvgGenerator {
         SvgGenerator {
             color_generator: ColorGenerator::new(seed),
             num_colors,
-            id: id,
+            id,
         }
     }
     fn generate_svg(&mut self) -> String {
