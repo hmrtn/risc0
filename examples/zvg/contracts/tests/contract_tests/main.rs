@@ -43,14 +43,11 @@ pub async fn test_successful_contract_usage() -> Result<(), Box<dyn Error>> {
         let mut subscription = events.subscribe().await?;
 
         // Call a function which offloads work to Bonsai.
-        hello_bonsai
-            .mint(U256::from(10))
-            .send()
-            .await?;
+        hello_bonsai.mint(U256::from(10)).send().await?;
 
         // Wait for the callback to come from Bonsai.
         let mut callback_log = subscription.next().await.unwrap()?;
-        println!("callback_log: {:?}", callback_log);
+        println!("callback_log: {}", callback_log);
         // assert_eq!(
         //     callback_log.id,
         //     U256::from(10)

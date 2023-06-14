@@ -18,6 +18,5 @@
     "ci": "solhint 'contracts/contracts/**/*.sol' && prettier --check 'contracts/contracts/**/*.sol' && license_checker"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.1"
   }
 }

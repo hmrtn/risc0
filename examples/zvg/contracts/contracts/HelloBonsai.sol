@@ -24,7 +24,7 @@ contract HelloBonsai is BonsaiApp, ERC721 {
 
   mapping(uint256 => string) public token_svg_cache;
 
-  event CalculateFibonacciCallback(uint256 indexed id, uint256 result);
+  event MintCallback(uint256 indexed id, string result);
 
   constructor(
     IBonsaiProxy _bonsai_proxy,
@@ -38,28 +38,16 @@ contract HelloBonsai is BonsaiApp, ERC721 {
   function symbol() public view virtual override returns (string memory) {
     return "BNFT";
   }
-//
-//  function calculate_fibonacci(uint256 n) external {
-//    submit_bonsai_request(abi.encode(n));
-//  }
 
-  /// @notice Callback function logic for processing verified journals from Bonsai.
   function bonsai_callback(bytes memory journal) internal override {
-    (uint256 id, uint256 result) = abi.decode(journal, (uint256, uint256));
-
-    emit CalculateFibonacciCallback(id, result);
-    token_svg_cache[id] = string(abi.encodePacked(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">',
-      '<text x="10" y="20" style="fill:blue;">',
-      'Hello, World!',
-      '</text>',
-      '</svg>'
-    ));
+    (uint256 id, string memory result) = abi.decode(journal, (uint256, string));
+    emit MintCallback(id, result);
+    token_svg_cache[id] = result;
   }
 
   function tokenURI(uint256 id) public view virtual override returns (string memory) {
     if (!_exists(id)) revert TokenDoesNotExist();
-    return string(abi.encodePacked("Hello, World!"));
+    return token_svg_cache[id];
   }
 
   function mint(uint256 id) public virtual {
