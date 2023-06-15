@@ -1,6 +1,37 @@
-# Bonsai Merkle Tree
+# Merkle Roots With Bonsai
 
 ## Getting Started
+
+This project utilizes RISC Zero's Bonsai network and zkVM to calculate the Merkle
+root of an array of 32-byte hashes (H256) and store the result directly on a
+blockchain. The Bonsai network's ability to perform off-chain computations is a
+key component in the calculation of these Merkle roots. Users interact with this
+system through a function call, which results in the creation of a Merkle root
+that is stored in a smart contract.
+
+### Methods
+
+The main functionality of the code is encapsulated in the `merkle_root` function.
+
+`merkle_root` is responsible for calculating the Merkle root of an array of `H256`
+values. It hashes each `H256` value with Sha256, constructs a Merkle tree from
+the hashed values, and extracts the Merkle root from the tree. This is
+useful for creating a compact representation of a large set of data, which can
+be used to verify whether a specific piece of data is part of the set.
+The entry point reads an array of `H256` values from the user, calculates the
+Merkle root of the array, and commits the result back to the contract.
+The input is read as a slice of bytes, which is then decoded into an array of `H256`
+values. This allows the function to handle a large amount of input data efficiently.
+
+### Contracts
+
+The contract `Merkle` is a smart contract that stores the Merkle roots calculated
+by the `merkle_root` bonsai callback. It maps each Merkle root to a unique ID.
+The contract provides a `merkle_root` function that allows users to submit an
+array of 32 `H256` values, and the callback function stores the resulting Merkle
+root in the contract when the calculation is complete. This contract is useful
+for storing the results of Merkle root calculations on the blockchain, where they
+can be publicly verified.
 
 ### Build
 
@@ -17,39 +48,6 @@ Running the following will run all tests, including Ethereum contracts and RISC 
 ```bash
 cargo test
 ```
-
-### Contracts
-
-Ethereum contracts are in the `contracts` directory.
-Solidity can be found in `contracts/contracts` including the application source and an interface and mock implementation of the Bonsai proxy.
-Rust functions to interact with your application are included in `contracts/src/lib.rs`.
-
-Contracts are built and tested with [Cargo] with the Rust [ethers] libraries.
-The build configuration is in `contracts/build.rs`.
-Tests are written in Rust and run against Ganache.
-Tests are defined in `contracts/tests`.
-
-### Methods
-
-[RISC Zero] guest programs are defined in the `methods` directory.
-This is where you will define one or more guest programs to act as a coprocessor to your on-chain logic.
-More example of what you can do in the guest can be found in the [RISC Zero examples].
-
-Code in the `methods/guest` directory will be compiled into one or more [RISC-V] binaries.
-Each will have a corresponding image ID, which is a hash identifying the program.
-When deploying your application, you will upload your binary to Bonsai where the guest will run when requested.
-The image ID will be included in the deployment of the smart contracts to reference your guest program living in Bonsai.
-
-Build configuration for the methods is included in `methods/build.rs` and tests of the guest itself are in `methods/src/lib.rs`.
-
-### CLI
-
-A starter CLI is provided to help deploy contracts to Ethereum and RISC Zero guest programs to Bonsai.
-Additionally the CLI includes example commands to interact with the smart contract via ethers.
-
-CLI commands are defined in their respective files in `cli/src/bin`.
-
-**To get access to Bonsai, sign up for the [waitlist].**
 
 #### Deploy
 
